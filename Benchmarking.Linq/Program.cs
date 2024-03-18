@@ -1,3 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-Console.WriteLine("Hello, World!");
+using Benchmarking.Linq;
+
+var options = new ParquetReaderServiceOptions("data");

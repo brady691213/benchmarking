@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarking.Linq", "Benchmarking.Linq\Benchmarking.Linq.csproj", "{BEE00B4E-B086-46A4-8F83-3F780F528FA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarking.Linq.Tests", "Benchmarking.Linq.Tests\Benchmarking.Linq.Tests.csproj", "{31F69A17-DC6C-4333-93D6-6F59C1E3D97F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{BEE00B4E-B086-46A4-8F83-3F780F528FA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEE00B4E-B086-46A4-8F83-3F780F528FA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEE00B4E-B086-46A4-8F83-3F780F528FA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31F69A17-DC6C-4333-93D6-6F59C1E3D97F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31F69A17-DC6C-4333-93D6-6F59C1E3D97F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31F69A17-DC6C-4333-93D6-6F59C1E3D97F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31F69A17-DC6C-4333-93D6-6F59C1E3D97F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
