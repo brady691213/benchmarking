@@ -1,5 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
-
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Benchmarking.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
-var options = new ParquetReaderServiceOptions("data");
+// TASKT: Logging
+
+var builder = Host.CreateApplicationBuilder(args);
+builder.Services.Configure<ParquetReaderServiceOptions>(
+    builder.Configuration.GetSection(nameof(ParquetReaderServiceOptions)));
+
+ParquetReaderServiceOptions options = new("data");
+
+using IHost host = builder.Build();
+await host.RunAsync();

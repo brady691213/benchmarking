@@ -1,18 +1,15 @@
 ﻿using System.Reflection;
+using Microsoft.Extensions.Options;
 using Parquet;
+using Parquet.Data;
 using Parquet.Serialization;
 
 namespace Benchmarking.Linq;
 
-// TASKQ How to get a better default value for ParquetReaderOptions?
-public class ParquetReaderService(string filePath, ParquetReaderServiceOptions? options = null)
+public class ParquetReaderService(string filePath, IOptionsSnapshot<ParquetReaderServiceOptions> options)
 {
-    private FileStream OpenStream(string filePath)
-    {
-        // TASKT: Validation etc.
-        return File.OpenRead(filePath);
-    }
-
+    private readonly ParquetReaderServiceOptions serviceOptions = options.Value;
+    
     /// <summary>
     /// Reads all rows in a Parquet file.
     /// </summary>
@@ -22,15 +19,36 @@ public class ParquetReaderService(string filePath, ParquetReaderServiceOptions? 
     public async Task<IEnumerable<T>> ReadFileRows<T>(string filePath) where T : new()
     {
         var ret = new List<T>();
-        var reader = await ParquetReader.CreateAsync(OpenStream(Path.Combine(options?.ParquetDataPath ?? "data", filePath)), options?.ParquetReaderOptions);
+        using var reader = await OpenReader(filePath);
         if (reader.RowGroupCount == 0)
             return ret;
         for (var rowGroupIndex = 0; rowGroupIndex < reader.RowGroupCount; rowGroupIndex++)
         {
             // TASKT: Separate path and filename.
-            var rgData = await ParquetSerializer.DeserializeAsync<T>(options.ParquetDataPath, rowGroupIndex);
+            var rgData = await ParquetSerializer.DeserializeAsync<T>(serviceOptions.ParquetDataPath, rowGroupIndex);
             ret.AddRange(rgData);
-        }   
-        return ret;
+        }
+
+        return ret.AsEnumerable();
+    }
+
+    public async Task GenerateSchemaClass(string parquetPath, string outputPath)
+    {
+        using var reader = await OpenReader(parquetPath);
+        var schema = reader.Schema;
+        var generator = new ClassGenerator(schema);
+    }
+
+    // ReSharper disable once MemberCanBeMadeStatic.Local
+    private FileStream OpenStream(string filePath)
+    {
+        // TASKT: Validation etc.
+        return File.OpenRead(filePath);
+    }    
+    
+    private async Task<ParquetReader> OpenReader(string filePath)
+    {
+        var reader = await ParquetReader.CreateAsync(OpenStream(Path.Combine(serviceOptions.ParquetDataPath, filePath)), serviceOptions.ParquetReaderOptions);
+        return reader;
     }
 }
